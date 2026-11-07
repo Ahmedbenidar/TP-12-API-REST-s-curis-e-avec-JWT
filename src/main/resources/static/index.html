@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail USMBA — Console API JWT</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="bandeau">
+    <div class="bandeau__titre">
+        <span class="logo">USMBA</span>
+        <div>
+            <h1>Portail des dossiers — Console API</h1>
+            <p>API REST stateless protégée par jeton JWT (aucune session serveur)</p>
+        </div>
+    </div>
+    <div class="bandeau__etat" id="etat-service">vérification…</div>
+</header>
+
+<main class="grille">
+
+    <section class="panneau">
+        <h2>1. Obtenir un jeton</h2>
+
+        <div class="comptes-demo">
+            <button type="button" class="puce" data-id="a.benidar" data-mdp="admin123">
+                a.benidar · admin123 <em>ADMIN</em>
+            </button>
+            <button type="button" class="puce" data-id="s.idalen" data-mdp="membre123">
+                s.idalen · membre123 <em>MEMBRE</em>
+            </button>
+            <button type="button" class="puce" data-id="k.ouazzani" data-mdp="membre123">
+                k.ouazzani · membre123 <em>MEMBRE</em>
+            </button>
+        </div>
+
+        <form id="formulaire-connexion" class="formulaire">
+            <label>
+                Identifiant
+                <input type="text" id="champ-identifiant" value="a.benidar" autocomplete="username">
+            </label>
+            <label>
+                Mot de passe
+                <input type="text" id="champ-mot-de-passe" value="admin123" autocomplete="current-password">
+            </label>
+            <button type="submit" class="bouton bouton--principal">POST /api/auth/connexion</button>
+        </form>
+
+        <div class="jeton-bloc">
+            <div class="jeton-bloc__entete">
+                <span>Jeton courant</span>
+                <span class="etiquette" id="etiquette-roles">aucun jeton</span>
+            </div>
+            <textarea id="champ-jeton" readonly rows="4"
+                      placeholder="Le jeton JWT apparaîtra ici après la connexion."></textarea>
+        </div>
+    </section>
+
+    <section class="panneau">
+        <h2>2. Appeler les routes protégées</h2>
+
+        <div class="actions">
+            <button type="button" class="bouton" data-appel="public-etat">
+                GET /api/public/etat <em>public</em>
+            </button>
+            <button type="button" class="bouton" data-appel="moi">
+                GET /api/auth/moi <em>jeton</em>
+            </button>
+            <button type="button" class="bouton" data-appel="membre">
+                GET /api/membre/tableau-de-bord <em>MEMBRE</em>
+            </button>
+            <button type="button" class="bouton" data-appel="admin-stats">
+                GET /api/administration/statistiques <em>ADMIN</em>
+            </button>
+            <button type="button" class="bouton" data-appel="admin-comptes">
+                GET /api/administration/comptes <em>ADMIN</em>
+            </button>
+            <button type="button" class="bouton bouton--danger" data-appel="sans-jeton">
+                GET /api/membre/tableau-de-bord sans jeton
+            </button>
+            <button type="button" class="bouton bouton--danger" data-appel="jeton-falsifie">
+                GET /api/membre/tableau-de-bord jeton falsifié
+            </button>
+        </div>
+
+        <div class="reponse-bloc">
+            <div class="reponse-bloc__entete">
+                <span id="reponse-route">Aucun appel effectué</span>
+                <span class="code-http" id="code-http">—</span>
+            </div>
+            <pre id="reponse-contenu">Lancez une requête pour voir la réponse réelle du serveur.</pre>
+        </div>
+    </section>
+
+    <section class="panneau panneau--large">
+        <h2>3. Journal des requêtes</h2>
+        <table class="journal">
+            <thead>
+            <tr>
+                <th>Heure</th>
+                <th>Méthode</th>
+                <th>Route</th>
+                <th>Jeton envoyé</th>
+                <th>Code</th>
+            </tr>
+            </thead>
+            <tbody id="corps-journal">
+            <tr class="journal__vide">
+                <td colspan="5">Aucune requête pour le moment.</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>
